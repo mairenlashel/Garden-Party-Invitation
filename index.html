@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>You're Invited — A Garden Picnic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Mulish:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* Sun-washed meadow palette — blush forward */
+    --cream:   #fdf3ea;
+    --cream-2: #f7e7d8;
+    --butter:  #f4d690;
+    --peach:   #dd97a0;   /* blush rose accent */
+    --peach-soft:#f1c3c9; /* soft blush */
+    --green-soft:#aac38c;
+    --green-mid: #87a86a;
+    --green-deep:#4f6b45;
+    --ink:     #5a4536;
+    --ink-soft:#937a6c;
+    --glow:    #ffd479;   /* fairy-light color */
+    --glow-2:  #ffba6b;
+    --display-font: 'Playfair Display', serif;
+    --accent-font: 'Cormorant Garamond', serif;
+    --heading: #9c4f5e;   /* headline color */
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:'Mulish', sans-serif;
+    background:#f3e3d8;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Stage / phone scaling ---------- */
+  .stage{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .phone-scaler{
+    width:430px; height:932px;
+    transform-origin:center center;
+    will-change:transform;
+  }
+  .phone{
+    position:relative;
+    width:430px; height:932px;
+    border-radius:46px;
+    overflow:hidden;
+    box-shadow:
+      0 2px 0 rgba(255,255,255,.5) inset,
+      0 40px 90px -30px rgba(90,74,54,.55),
+      0 8px 28px -12px rgba(90,74,54,.4);
+    background:linear-gradient(180deg,
+      color-mix(in srgb, var(--butter) 48%, var(--cream)) 0%,
+      var(--cream) 16%,
+      color-mix(in srgb, var(--peach-soft) 42%, var(--cream)) 36%,
+      color-mix(in srgb, var(--peach-soft) 82%, var(--cream)) 56%,
+      color-mix(in srgb, var(--peach-soft) 58%, var(--cream)) 78%,
+      color-mix(in srgb, var(--peach-soft) 30%, var(--cream)) 100%);
+    isolation:isolate;
+  }
+  /* faint warm haze at the very bottom */
+  .phone::after{
+    content:""; position:absolute; left:-12%; right:-12%; bottom:-180px; height:340px;
+    background:radial-gradient(60% 100% at 50% 100%, var(--butter) 0%, rgba(244,214,144,.22) 46%, rgba(244,214,144,0) 74%);
+    opacity:.5; pointer-events:none; z-index:0;
+  }
+
+  /* ---------- Fairy lights ---------- */
+  .lights{ position:absolute; top:0; left:0; width:430px; height:96px; z-index:6; pointer-events:none; }
+  .lights svg{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  .wire{ fill:none; stroke:#6f5c43; stroke-width:1.6; opacity:.55; }
+  .bulb{
+    position:absolute; width:13px; height:17px;
+    border-radius:48% 48% 52% 52% / 38% 38% 62% 62%;
+    background:radial-gradient(circle at 38% 32%, #fff7df 0%, var(--glow) 46%, var(--glow-2) 100%);
+    transform:translate(-50%,0);
+    box-shadow:0 0 9px 2px var(--glow), 0 0 20px 6px color-mix(in srgb, var(--glow) 55%, transparent);
+    animation:twinkle 3.6s ease-in-out infinite;
+  }
+  .bulb::before{ /* little cap */
+    content:""; position:absolute; left:50%; top:-4px; width:5px; height:5px;
+    border-radius:2px; background:#7a6045; transform:translateX(-50%);
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:.55; box-shadow:0 0 5px 1px var(--glow), 0 0 12px 3px color-mix(in srgb, var(--glow) 35%, transparent); }
+    50%    { opacity:1;   box-shadow:0 0 11px 3px var(--glow), 0 0 26px 9px color-mix(in srgb, var(--glow) 60%, transparent); }
+  }
+
+  /* ---------- Fireflies / sparkle motes ---------- */
+  .fireflies{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  .firefly{
+    position:absolute; bottom:-12px; width:7px; height:7px; border-radius:50%;
+    background:radial-gradient(circle, #fff7da 0%, var(--glow) 50%, rgba(255,186,107,0) 78%);
+    box-shadow:0 0 8px 2px color-mix(in srgb, var(--glow) 70%, transparent),
+               0 0 16px 5px color-mix(in srgb, var(--glow) 35%, transparent);
+    opacity:0;
+    animation:float-up linear infinite, ff-twinkle 2.6s ease-in-out infinite;
+  }
+  body.no-fireflies .fireflies{ display:none; }
+  @keyframes ff-twinkle{ 0%,100%{ filter:brightness(.85); } 50%{ filter:brightness(1.35); } }
+  @keyframes float-up{
+    0%{ transform:translateY(0) translateX(0) scale(.6); opacity:0; }
+    10%{ opacity:.95; }
+    50%{ transform:translateY(-46vh) translateX(14px) scale(1); }
+    82%{ opacity:.9; }
+    100%{ transform:translateY(-96vh) translateX(-10px) scale(.5); opacity:0; }
+  }
+
+  /* ---------- Screens ---------- */
+  .screen{
+    position:absolute; inset:0; z-index:4;
+    display:flex; flex-direction:column; align-items:center;
+    padding:104px 38px 44px;
+    text-align:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .85s ease, transform .85s cubic-bezier(.2,.75,.2,1);
+    overflow:auto; scrollbar-width:none;
+  }
+  .screen::-webkit-scrollbar{ display:none; }
+  .screen--invite { transform:translateY(-22px); }
+  .screen--details{ transform:translateY(26px); }
+  .phone[data-screen="invite"]  .screen--invite { opacity:1; transform:none; pointer-events:auto; }
+  .phone[data-screen="details"] .screen--details{ opacity:1; transform:none; pointer-events:auto; }
+
+  .eyebrow{
+    font-size:13px; font-weight:600; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--peach); display:flex; align-items:center; gap:11px;
+  }
+  .eyebrow::before,.eyebrow::after{ content:""; width:22px; height:1.5px; background:var(--peach); opacity:.6; border-radius:2px; }
+
+  /* ===== Screen 1 ===== */
+  .hero-center{
+    width:100%; flex:1; display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+  }
+  .invite-open{
+    background:none; border:none; padding:6px 4px 2px; margin-top:0; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    -webkit-tap-highlight-color:transparent;
+    animation:breathe 4.5s ease-in-out infinite;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .invite-open:hover{ transform:scale(1.035); }
+  .invite-open:active{ transform:scale(.99); }
+  @keyframes breathe{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); } }
+
+  .hero-title{
+    position:relative;
+    font-family:var(--display-font); font-weight:600; font-style:italic;
+    font-size:90px; line-height:.96; color:var(--heading);
+    letter-spacing:.5px;
+    text-shadow:0 2px 0 rgba(255,255,255,.55), 0 0 34px color-mix(in srgb, var(--peach) 35%, transparent);
+  }
+  /* soft breathing glow behind the title to invite the tap */
+  .invite-open::before{
+    content:""; position:absolute; left:50%; top:46%; width:300px; height:230px;
+    transform:translate(-50%,-50%); border-radius:50%; z-index:-1;
+    background:radial-gradient(closest-side, color-mix(in srgb, var(--peach-soft) 70%, transparent) 0%, transparent 72%);
+    filter:blur(6px); opacity:.6;
+    animation:halo 4.5s ease-in-out infinite;
+  }
+  @keyframes halo{ 0%,100%{ opacity:.4; transform:translate(-50%,-50%) scale(.92); } 50%{ opacity:.75; transform:translate(-50%,-50%) scale(1.05); } }
+
+  .tap-hint{
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:'Mulish',sans-serif; font-size:12px; font-weight:600;
+    letter-spacing:.34em; text-transform:uppercase; color:var(--peach);
+    animation:hint-pulse 2.4s ease-in-out infinite;
+  }
+  .tap-hint::before,.tap-hint::after{ content:""; width:16px; height:1.5px; background:var(--peach); opacity:.55; border-radius:2px; }
+  .tap-hint .dot{ width:5px; height:5px; border-radius:50%; background:var(--peach); box-shadow:0 0 8px var(--peach); }
+  @keyframes hint-pulse{ 0%,100%{ opacity:.5; } 50%{ opacity:1; } }
+
+  .hero-sub{
+    font-family:var(--accent-font); font-style:italic; font-weight:500;
+    font-size:25px; color:var(--ink); margin-top:24px; line-height:1.4;
+  }
+  .hero-host{
+    font-size:13px; color:var(--ink-soft); font-weight:500; letter-spacing:.18em; text-transform:uppercase;
+  }
+  .hero-host b{ font-family:var(--display-font); font-style:italic; font-size:34px; color:var(--peach); font-weight:600; display:block; margin-top:4px; letter-spacing:.5px; text-transform:none; }
+
+  .sprig{ margin:32px 0 4px; color:var(--green-mid); animation:sway 6s ease-in-out infinite; transform-origin:50% 0%; }
+  @keyframes sway{ 0%,100%{ transform:rotate(-3.5deg); } 50%{ transform:rotate(3.5deg); } }
+
+  /* ===== Screen 2 ===== */
+  .details-title{
+    font-family:var(--display-font); font-weight:700; font-size:54px; line-height:1.1;
+    white-space:nowrap; padding-bottom:4px;
+    color:var(--heading); margin-top:10px; text-shadow:0 2px 0 rgba(255,255,255,.5);
+  }
+  .details-intro{ font-family:var(--accent-font),cursive; font-style:italic; font-size:18px; color:var(--ink-soft); margin-top:4px; }
+
+  .detail-list{ width:100%; margin-top:34px; display:flex; flex-direction:column; gap:18px; }
+  .detail{
+    display:flex; align-items:center; gap:16px; text-align:left;
+    background:rgba(255,255,255,.5);
+    border:1.5px solid rgba(214,164,108,.28);
+    border-radius:22px; padding:17px 19px;
+    box-shadow:0 8px 20px -16px rgba(90,74,54,.6);
+    backdrop-filter:blur(2px);
+  }
+  .detail .badge{
+    flex:none; width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 38% 32%, #fff3d4 0%, var(--butter) 70%, var(--peach-soft) 100%);
+    color:var(--green-deep);
+    box-shadow:0 4px 10px -4px rgba(214,164,108,.7), 0 0 0 1.5px rgba(255,255,255,.6) inset;
+  }
+  .detail .badge svg{ width:23px; height:23px; }
+  .detail .txt{ min-width:0; }
+  .detail .txt .label{ font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--peach); }
+  .detail .txt .value{ font-size:18px; font-weight:600; color:var(--ink); margin-top:2px; white-space:nowrap; }
+  .detail .txt .value small{ display:block; font-weight:500; font-size:12.5px; color:var(--ink-soft); letter-spacing:0; }
+
+  .rsvp-note{
+    margin-top:26px; max-width:260px; font-family:var(--accent-font); font-style:italic; font-size:18px; line-height:1.5; color:var(--ink-soft);
+  }
+  .rsvp-note .heart{ color:var(--peach); font-style:normal; }
+
+  .back{
+    margin-top:44px; align-self:flex-start; background:none; border:none; cursor:pointer;
+    font-family:'Mulish',sans-serif; font-weight:600; font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-soft); display:inline-flex; align-items:center; gap:7px; padding:8px 12px; border-radius:20px;
+    transition:color .2s ease, transform .2s ease;
+  }
+  .back:hover{ color:var(--peach); transform:translateX(-3px); }
+
+  @media (prefers-reduced-motion: reduce){
+    .bulb,.sprig,.firefly,.invite-open,.tap-hint,.invite-open::before{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="phone-scaler">
+      <div class="phone" data-screen="invite">
+
+        <!-- shared ambient layers -->
+        <div class="fireflies" id="fireflies"></div>
+
+        <!-- fairy lights -->
+        <div class="lights" aria-hidden="true">
+          <svg viewBox="0 0 430 96" preserveAspectRatio="none">
+            <path class="wire" d="M0,18 Q36,60 72,18 Q108,60 143,18 Q179,60 215,18 Q251,60 287,18 Q322,60 358,18 Q394,60 430,18" />
+          </svg>
+          <span class="bulb" style="left:36px;  top:40px; animation-delay:0s"></span>
+          <span class="bulb" style="left:108px; top:40px; animation-delay:.5s"></span>
+          <span class="bulb" style="left:179px; top:40px; animation-delay:1.1s"></span>
+          <span class="bulb" style="left:251px; top:40px; animation-delay:.3s"></span>
+          <span class="bulb" style="left:322px; top:40px; animation-delay:1.5s"></span>
+          <span class="bulb" style="left:394px; top:40px; animation-delay:.8s"></span>
+        </div>
+
+        <!-- ===== Screen 1: You're Invited ===== -->
+        <section class="screen screen--invite" data-screen-label="01 Invite">
+          <div class="hero-center">
+            <button class="invite-open" id="toDetails">
+              <span class="hero-title">You're<br>Invited!</span>
+              <span class="tap-hint"><span class="dot"></span>tap to open</span>
+            </button>
+
+            <!-- little botanical sprig -->
+            <svg class="sprig" width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M32 38 C32 24 32 14 32 6" />
+              <path d="M32 22 C24 20 19 15 17 9 C24 9 30 13 32 19" fill="rgba(135,168,106,.25)" />
+              <path d="M32 18 C40 16 45 11 47 5 C40 5 34 9 32 15" fill="rgba(135,168,106,.25)" />
+              <path d="M32 30 C26 29 22 26 20 21 C26 21 30 24 32 28" fill="rgba(135,168,106,.2)" />
+              <circle cx="32" cy="5" r="3.2" fill="var(--peach)" stroke="none" />
+            </svg>
+          </div>
+
+          <p class="hero-host">With love from<b>Mairen</b></p>
+        </section>
+
+        <!-- ===== Screen 2: Details ===== -->
+        <section class="screen screen--details" data-screen-label="02 Details">
+          <p class="eyebrow">A Garden Picnic</p>
+          <h2 class="details-title">The Details</h2>
+
+          <div class="detail-list">
+            <div class="detail">
+              <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 9.5h17M8 3v3M16 3v3"/><circle cx="12" cy="14.5" r="1.6" fill="currentColor" stroke="none"/></svg></span>
+              <div class="txt"><div class="label">When</div><div class="value" style="white-space:nowrap">Thursday, June 18<small>2026</small></div></div>
+            </div>
+
+            <div class="detail">
+              <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+              <div class="txt"><div class="label">Time</div><div class="value">6:00 in the evening</div></div>
+            </div>
+
+            <div class="detail">
+              <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c5-5 7.5-8.4 7.5-11.5A7.5 7.5 0 0 0 4.5 9.5C4.5 12.6 7 16 12 21Z"/><circle cx="12" cy="9.5" r="2.6"/></svg></span>
+              <div class="txt"><div class="label">Where</div><div class="value">The Hooch House</div></div>
+            </div>
+
+            <div class="detail">
+              <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h7l-.6 8.2a3 3 0 0 1-3 2.8h-.8a3 3 0 0 1-3-2.8L6 4"/><path d="M13.6 6.5h2.9a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-2.4M10 17.5V20M7.5 20h5"/></svg></span>
+              <div class="txt"><div class="label">Sips</div><div class="value">BYOB<small>a light dinner will be served</small></div></div>
+            </div>
+
+            <div class="detail">
+              <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="3"/><path d="M4.5 7.5l7.5 5 7.5-5"/></svg></span>
+              <div class="txt"><div class="label">Kindly reply</div><div class="value">RSVP by June 13</div></div>
+            </div>
+          </div>
+
+          <button class="back" id="toInvite">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+            Back
+          </button>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ---------- Phone scaling ---------- */
+    const scaler = document.querySelector('.phone-scaler');
+    function fit(){
+      const pad = 28;
+      const s = Math.min((window.innerWidth - pad)/430, (window.innerHeight - pad)/932);
+      scaler.style.transform = `scale(${s})`;
+    }
+    window.addEventListener('resize', fit); fit();
+
+    /* ---------- Screen transition ---------- */
+    const phone = document.querySelector('.phone');
+    document.getElementById('toDetails').addEventListener('click', ()=>{
+      phone.dataset.screen = 'details';
+      phone.querySelector('.screen--details').scrollTop = 0;
+    });
+    document.getElementById('toInvite').addEventListener('click', ()=>{
+      phone.dataset.screen = 'invite';
+    });
+
+    /* ---------- Fireflies ---------- */
+    const ff = document.getElementById('fireflies');
+    function buildFireflies(n){
+      ff.innerHTML='';
+      for(let i=0;i<n;i++){
+        const f=document.createElement('span');
+        f.className='firefly';
+        const dur = 8 + Math.random()*8;
+        f.style.left = (3 + Math.random()*94) + '%';
+        f.style.bottom = (-5 - Math.random()*12) + '%';
+        f.style.animationDuration = dur + 's, ' + (2 + Math.random()*2.5) + 's';
+        f.style.animationDelay = (-Math.random()*dur) + 's, ' + (-Math.random()*3) + 's';
+        const sc = .7 + Math.random()*1;
+        f.style.width = f.style.height = (6*sc) + 'px';
+        ff.appendChild(f);
+      }
+    }
+    buildFireflies(26);
+  </script>
+</body>
+</html>
