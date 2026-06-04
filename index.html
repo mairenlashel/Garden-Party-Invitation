@@ -222,20 +222,20 @@
   .detail .txt .value{ font-size:18px; font-weight:600; color:var(--ink); margin-top:2px; white-space:nowrap; }
   .detail .txt .value small{ display:block; font-weight:500; font-size:12.5px; color:var(--ink-soft); letter-spacing:0; }
 
-  /* Tappable RSVP card */
-  a.detail{ text-decoration:none; color:inherit; -webkit-tap-highlight-color:transparent; }
-  .detail--rsvp{
+  /* Tappable detail cards (RSVP, add-to-calendar) */
+  a.detail{
+    text-decoration:none; color:inherit; -webkit-tap-highlight-color:transparent;
     cursor:pointer;
     transition:transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, border-color .2s ease, background .2s ease;
   }
-  .detail--rsvp:hover{
+  a.detail:hover{
     transform:translateY(-2px);
     background:rgba(255,255,255,.62);
     border-color:rgba(214,164,108,.5);
     box-shadow:0 14px 26px -16px rgba(90,74,54,.7);
   }
-  .detail--rsvp:active{ transform:translateY(0) scale(.99); }
-  .detail--rsvp .value small{ color:var(--peach); font-weight:700; letter-spacing:.02em; margin-top:3px; }
+  a.detail:active{ transform:translateY(0) scale(.99); }
+  .detail .value .tap-cue{ color:var(--peach); font-weight:700; letter-spacing:.02em; margin-top:3px; }
 
   .rsvp-note{
     margin-top:26px; max-width:260px; font-family:var(--accent-font); font-style:italic; font-size:18px; line-height:1.5; color:var(--ink-soft);
@@ -310,10 +310,10 @@
           <h2 class="details-title">The Details</h2>
 
           <div class="detail-list">
-            <div class="detail">
+            <a class="detail" href="event.ics">
               <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 9.5h17M8 3v3M16 3v3"/><circle cx="12" cy="14.5" r="1.6" fill="currentColor" stroke="none"/></svg></span>
-              <div class="txt"><div class="label">When</div><div class="value" style="white-space:nowrap">Thursday, June 18<small>2026</small></div></div>
-            </div>
+              <div class="txt"><div class="label">When</div><div class="value" style="white-space:nowrap">Thursday, June 18<small>2026</small><small class="tap-cue">Tap to add to calendar ›</small></div></div>
+            </a>
 
             <div class="detail">
               <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
@@ -330,9 +330,9 @@
               <div class="txt"><div class="label">Sips</div><div class="value">BYOB<small>a light dinner will be served</small></div></div>
             </div>
 
-            <a class="detail detail--rsvp" href="sms:+12088500540?&amp;body=I'll%20be%20there!%20🌿🌸✨">
+            <a class="detail" href="sms:+12088500540?&amp;body=I'll%20be%20there!%20🌿🌸✨">
               <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="3"/><path d="M4.5 7.5l7.5 5 7.5-5"/></svg></span>
-              <div class="txt"><div class="label">Kindly reply</div><div class="value">RSVP by June 13<small>Tap to text me ›</small></div></div>
+              <div class="txt"><div class="label">Kindly reply</div><div class="value">RSVP by June 13<small class="tap-cue">Tap to text me ›</small></div></div>
             </a>
           </div>
 
