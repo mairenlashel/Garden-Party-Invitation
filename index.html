@@ -116,7 +116,7 @@
 
   /* ---------- Screens ---------- */
   .screen{
-    position:absolute; inset:0; z-index:4;
+    position:absolute; inset:0; z-index:8; /* above the fairy lights so text layers over them */
     display:flex; flex-direction:column; align-items:center;
     padding:104px 38px 44px;
     text-align:center;
@@ -233,6 +233,13 @@
     transition:color .2s ease, transform .2s ease;
   }
   .back:hover{ color:var(--peach); transform:translateX(-3px); }
+
+  /* On phones, tighten the Details spacing so all cards fit without scrolling */
+  body.fill .screen{ padding:96px 32px 24px; }
+  body.fill .details-title{ margin-top:4px; }
+  body.fill .detail-list{ margin-top:16px; gap:11px; }
+  body.fill .detail{ padding:13px 18px; }
+  body.fill .back{ margin-top:18px; }
 
   @media (prefers-reduced-motion: reduce){
     .bulb,.sprig,.firefly,.invite-open,.tap-hint,.invite-open::before{ animation:none !important; }
