@@ -64,6 +64,8 @@
       color-mix(in srgb, var(--peach-soft) 30%, var(--cream)) 100%);
     isolation:isolate;
   }
+  /* On phones, fill the whole screen — drop the phone-frame look */
+  body.fill .phone{ border-radius:0; box-shadow:none; }
   /* faint warm haze at the very bottom */
   .phone::after{
     content:""; position:absolute; left:-12%; right:-12%; bottom:-180px; height:340px;
@@ -324,10 +326,25 @@
   <script>
     /* ---------- Phone scaling ---------- */
     const scaler = document.querySelector('.phone-scaler');
+    const phoneEl = document.querySelector('.phone');
     function fit(){
-      const pad = 28;
-      const s = Math.min((window.innerWidth - pad)/430, (window.innerHeight - pad)/932);
-      scaler.style.transform = `scale(${s})`;
+      // On phone-sized screens: scale to fill the viewport edge-to-edge.
+      // On larger screens: keep the framed "phone" centered with breathing room.
+      const fill = window.matchMedia('(max-width: 640px)').matches;
+      document.body.classList.toggle('fill', fill);
+      if(fill){
+        const s = window.innerWidth / 430;          // fill the full width
+        const h = window.innerHeight / s;            // make the frame as tall as the screen
+        scaler.style.height = h + 'px';
+        phoneEl.style.height = h + 'px';
+        scaler.style.transform = `scale(${s})`;
+      } else {
+        scaler.style.height = '';
+        phoneEl.style.height = '';
+        const pad = 28;
+        const s = Math.min((window.innerWidth - pad)/430, (window.innerHeight - pad)/932);
+        scaler.style.transform = `scale(${s})`;
+      }
     }
     window.addEventListener('resize', fit); fit();
 
